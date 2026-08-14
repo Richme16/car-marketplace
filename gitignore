@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+
+# Environment variables (API keys, database URLs - never commit these!)
+.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+
+# Logs
+npm-debug.log*
+*.log

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Motorline — Buy & Rent Cars</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#" class="logo">MOTOR<span>LINE</span></a>
+      <nav class="main-nav">
+        <a href="#listings">Inventory</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button class="btn btn-outline">Sign in</button>
+    </div>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <p class="eyebrow">Buy outright, or rent by the day</p>
+      <h1>Find the car that<br />fits the drive ahead.</h1>
+      <p class="hero-sub">
+        Browse verified listings, compare specs side by side, and book a
+        rental or purchase in minutes.
+      </p>
+
+      <form class="search-bar" id="search-form">
+        <div class="field">
+          <label for="q">Search</label>
+          <input type="text" id="q" placeholder="Make, model, or keyword" />
+        </div>
+        <div class="field">
+          <label for="type">Listing type</label>
+          <select id="type">
+            <option value="all">All</option>
+            <option value="sale">For sale</option>
+            <option value="rent">For rent</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="sort">Sort by</label>
+          <select id="sort">
+            <option value="default">Featured</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="mileage-asc">Mileage: Low to High</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ LISTINGS ============ -->
+  <section class="listings" id="listings">
+    <div class="container">
+      <div class="listings-header">
+        <h2>Available now</h2>
+        <span id="results-count" class="results-count"></span>
+      </div>
+
+      <div class="car-grid" id="car-grid"></div>
+
+      <p id="empty-state" class="empty-state" hidden>
+        No cars match that search. Try a different keyword or filter.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer" id="contact">
+    <div class="container footer-inner">
+      <div>
+        <a href="#" class="logo">MOTOR<span>LINE</span></a>
+        <p>A car sales &amp; rental marketplace.</p>
+      </div>
+      <div>
+        <h3>Contact</h3>
+        <p>hello@motorline.example</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
