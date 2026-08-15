@@ -1,15 +1,10 @@
-// ============ MOCK DATA ============
-// Later, this array will come from your backend/database instead.
-const cars = [
-  { id: 1, make: "Toyota", model: "Corolla", year: 2021, type: "sale", price: 14500, mileage: 22000 },
-  { id: 2, make: "Honda", model: "CR-V", year: 2022, type: "rent", price: 45, mileage: 9000 },
-  { id: 3, make: "Ford", model: "Mustang", year: 2020, type: "sale", price: 27800, mileage: 18000 },
-  { id: 4, make: "Kia", model: "Sportage", year: 2023, type: "rent", price: 55, mileage: 4000 },
-  { id: 5, make: "Hyundai", model: "Elantra", year: 2019, type: "sale", price: 11200, mileage: 41000 },
-  { id: 6, make: "Nissan", model: "Rogue", year: 2022, type: "rent", price: 50, mileage: 12500 },
-  { id: 7, make: "Chevrolet", model: "Malibu", year: 2021, type: "sale", price: 15900, mileage: 27000 },
-  { id: 8, make: "BMW", model: "3 Series", year: 2020, type: "sale", price: 24800, mileage: 20500 },
-];
+// ============ API CONFIG ============
+// Your backend server's address. Change this later when you deploy the backend online.
+const API_BASE_URL = "http://localhost:5000/api/cars";
+
+// All cars fetched from the API get stored here, so filtering/sorting
+// doesn't need to re-fetch every time.
+let allCars = [];
 
 // ============ DOM REFERENCES ============
 const grid = document.getElementById("car-grid");
@@ -24,15 +19,24 @@ const sortSelect = document.getElementById("sort");
 function carCardHTML(car) {
   const isRent = car.type === "rent";
   const priceLabel = isRent ? `$${car.price}/day` : `$${car.price.toLocaleString()}`;
+  const thumbnail = car.images && car.images.length ? car.images[0] : null;
 
   return `
     <article class="car-card">
-      <div class="car-media">
+      <a class="car-media" href="car-details.html?id=${car._id}">
         <span class="tag ${isRent ? "tag-rent" : "tag-sale"}">
           ${isRent ? "For Rent" : "For Sale"}
         </span>
-        ${car.year} ${car.make}
-      </div>
+        ${
+          thumbnail
+            ? `<img src="${thumbnail}" alt="${car.year} ${car.make} ${car.model}" class="car-image" />`
+            : `<svg viewBox="0 0 64 32" class="car-icon" aria-hidden="true">
+                <path d="M6 22 L10 12 Q13 8 20 8 L40 8 Q47 8 50 12 L58 22 L58 26 L52 26 Q52 22 47 22 Q42 22 42 26 L22 26 Q22 22 17 22 Q12 22 12 26 L6 26 Z" fill="currentColor" />
+                <circle cx="17" cy="26" r="4" fill="var(--asphalt-2)" stroke="currentColor" stroke-width="2" />
+                <circle cx="47" cy="26" r="4" fill="var(--asphalt-2)" stroke="currentColor" stroke-width="2" />
+              </svg>`
+        }
+      </a>
       <div class="car-body">
         <div>
           <h3 class="car-title">${car.make} ${car.model}</h3>
@@ -49,8 +53,8 @@ function carCardHTML(car) {
           </div>
         </div>
         <div class="car-actions">
-          <button class="btn btn-outline" data-action="details" data-id="${car.id}">Details</button>
-          <button class="btn btn-primary" data-action="${isRent ? "rent" : "buy"}" data-id="${car.id}">
+          <a class="btn btn-outline" href="car-details.html?id=${car._id}">Details</a>
+          <button class="btn btn-primary" data-action="${isRent ? "rent" : "buy"}" data-id="${car._id}">
             ${isRent ? "Rent now" : "Buy now"}
           </button>
         </div>
@@ -59,16 +63,15 @@ function carCardHTML(car) {
   `;
 }
 
-// ============ FILTER + SORT + RENDER ============
+// ============ FILTER + SORT + RENDER (runs on the already-fetched data) ============
 function renderCars() {
   const query = qInput.value.trim().toLowerCase();
   const type = typeSelect.value;
   const sort = sortSelect.value;
 
-  let filtered = cars.filter((car) => {
+  let filtered = allCars.filter((car) => {
     const matchesQuery =
-      !query ||
-      `${car.make} ${car.model}`.toLowerCase().includes(query);
+      !query || `${car.make} ${car.model}`.toLowerCase().includes(query);
     const matchesType = type === "all" || car.type === type;
     return matchesQuery && matchesType;
   });
@@ -89,6 +92,25 @@ function renderCars() {
   grid.innerHTML = filtered.map(carCardHTML).join("");
 }
 
+// ============ FETCH CARS FROM THE BACKEND ============
+async function loadCars() {
+  grid.innerHTML = `<p class="empty-state">Loading cars...</p>`;
+
+  try {
+    const response = await fetch(API_BASE_URL);
+    if (!response.ok) throw new Error(`Server responded with ${response.status}`);
+
+    allCars = await response.json();
+    renderCars();
+  } catch (error) {
+    grid.innerHTML = "";
+    emptyState.hidden = false;
+    emptyState.textContent =
+      "Couldn't load cars. Make sure your backend server is running (npm run dev in the backend folder).";
+    console.error("Failed to fetch cars:", error);
+  }
+}
+
 // ============ EVENTS ============
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -97,13 +119,13 @@ form.addEventListener("submit", (e) => {
 typeSelect.addEventListener("change", renderCars);
 sortSelect.addEventListener("change", renderCars);
 
-// Buy/Rent/Details button clicks (event delegation)
+// Buy/Rent button clicks (event delegation) — Details links now go straight to car-details.html
 grid.addEventListener("click", (e) => {
   const btn = e.target.closest("button[data-action]");
   if (!btn) return;
-  const car = cars.find((c) => c.id === Number(btn.dataset.id));
-  alert(`${btn.dataset.action.toUpperCase()}: ${car.make} ${car.model} — this will open a real booking form once we build the backend.`);
+  const car = allCars.find((c) => c._id === btn.dataset.id);
+  alert(`${btn.dataset.action.toUpperCase()}: ${car.make} ${car.model} — this will open a real booking form soon.`);
 });
 
-// ============ INITIAL RENDER ============
-renderCars();
+// ============ INITIAL LOAD ============
+loadCars();

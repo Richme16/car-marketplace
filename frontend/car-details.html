@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Car Details — Motorline</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">MOTOR<span>LINE</span></a>
+      <nav class="main-nav">
+        <a href="index.html#listings">Inventory</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+      <button class="btn btn-outline">Sign in</button>
+    </div>
+  </header>
+
+  <!-- ============ DETAILS CONTENT ============ -->
+  <section class="details-section">
+    <div class="container">
+      <a href="index.html" class="back-link">&larr; Back to inventory</a>
+
+      <!-- Everything below gets filled in by js/car-details.js -->
+      <div id="details-content"></div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer" id="contact">
+    <div class="container footer-inner">
+      <div>
+        <a href="index.html" class="logo">MOTOR<span>LINE</span></a>
+        <p>A car sales &amp; rental marketplace.</p>
+      </div>
+      <div>
+        <h3>Contact</h3>
+        <p>hello@motorline.example</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/car-details.js"></script>
+</body>
+</html>
