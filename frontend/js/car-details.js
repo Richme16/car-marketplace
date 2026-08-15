@@ -1,5 +1,5 @@
 // ============ API CONFIG ============
-const API_BASE_URL = "http://localhost:5000/api/cars";
+const API_BASE_URL = `${API_ROOT}/api/cars`;
 
 // ============ READ THE CAR ID FROM THE URL ============
 // If the URL is car-details.html?id=64f...ab, this pulls out that id string
@@ -44,7 +44,7 @@ function renderCar(car) {
   const priceLabel = isRent ? `$${car.price}/day` : `$${car.price.toLocaleString()}`;
   const images = car.images && car.images.length ? car.images : [];
 
-  document.title = `${car.year} ${car.make} ${car.model} — Motorline`;
+  document.title = `${car.year} ${car.make} ${car.model} — Bra Kay Motorline`;
 
   container.innerHTML = `
     <div class="details-layout">
@@ -158,7 +158,7 @@ function renderCar(car) {
 loadCarDetails();
 
 // ============ BOOKING MODAL ============
-const BOOKING_API_URL = "http://localhost:5000/api/bookings";
+const BOOKING_API_URL = `${API_ROOT}/api/bookings`;
 
 function openBookingModal(car) {
   const isRent = car.type === "rent";

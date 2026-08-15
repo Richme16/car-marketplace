@@ -66,6 +66,17 @@ h1, h2, h3 {
 }
 .btn-outline:hover { border-color: var(--amber); color: var(--amber); }
 
+.btn-admin {
+  background: transparent;
+  border: 1.5px solid var(--amber);
+  color: var(--amber);
+  padding: 9px 20px;
+}
+.btn-admin:hover {
+  background: var(--amber);
+  color: #1a1400;
+}
+
 /* ============ HEADER ============ */
 .site-header {
   border-bottom: 1px solid var(--asphalt-3);
@@ -83,11 +94,12 @@ h1, h2, h3 {
 }
 .logo {
   font-family: var(--font-display);
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
 }
-.logo span { color: var(--amber); }
+.logo span { color: var(--amber); margin-left: 4px; }
 .main-nav { display: flex; gap: 28px; }
 .main-nav a { color: var(--muted); font-weight: 500; transition: color 0.15s; }
 .main-nav a:hover { color: var(--chrome); }
