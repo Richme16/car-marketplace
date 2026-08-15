@@ -1,6 +1,6 @@
 // ============ API CONFIG ============
-// Your backend server's address. Change this later when you deploy the backend online.
-const API_BASE_URL = "http://localhost:5000/api/cars";
+// Reads API_ROOT from config.js (loaded before this file)
+const API_BASE_URL = `${API_ROOT}/api/cars`;
 
 // All cars fetched from the API get stored here, so filtering/sorting
 // doesn't need to re-fetch every time.
@@ -105,8 +105,7 @@ async function loadCars() {
   } catch (error) {
     grid.innerHTML = "";
     emptyState.hidden = false;
-    emptyState.textContent =
-      "Couldn't load cars. Make sure your backend server is running (npm run dev in the backend folder).";
+    emptyState.textContent = `Couldn't load cars. Error details: ${error.name}: ${error.message}`;
     console.error("Failed to fetch cars:", error);
   }
 }
