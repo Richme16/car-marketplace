@@ -1,4 +1,4 @@
-const API_BASE_URL = `${API_ROOT}/api/bookings`;
+const API_BASE_URL = `${API_ROOT}/api/services`;
 
 const token = localStorage.getItem("motorline_admin_token");
 if (!token) {
@@ -21,20 +21,20 @@ document.getElementById("logout-link").addEventListener("click", (e) => {
   window.location.href = "login.html";
 });
 
-const listContainer = document.getElementById("bookings-list");
+const listContainer = document.getElementById("services-list");
 
-async function loadBookings() {
-  listContainer.innerHTML = `<p class="empty-state">Loading bookings...</p>`;
+async function loadRequests() {
+  listContainer.innerHTML = `<p class="empty-state">Loading service requests...</p>`;
 
   try {
     const response = await fetch(API_BASE_URL, { headers: authHeaders() });
     if (response.status === 401) return handleAuthError();
     if (!response.ok) throw new Error(`Server responded with ${response.status}`);
 
-    const bookings = await response.json();
-    renderBookings(bookings);
+    const requests = await response.json();
+    renderRequests(requests);
   } catch (error) {
-    listContainer.innerHTML = `<p class="empty-state">Couldn't load bookings. Is the backend running?</p>`;
+    listContainer.innerHTML = `<p class="empty-state">Couldn't load service requests. Is the backend running?</p>`;
     console.error(error);
   }
 }
@@ -48,48 +48,45 @@ function formatDate(dateString) {
   });
 }
 
-function renderBookings(bookings) {
-  if (bookings.length === 0) {
-    listContainer.innerHTML = `<p class="empty-state">No booking requests yet.</p>`;
+function renderRequests(requests) {
+  if (requests.length === 0) {
+    listContainer.innerHTML = `<p class="empty-state">No service requests yet.</p>`;
     return;
   }
 
-  listContainer.innerHTML = bookings
-    .map((booking) => {
-      const car = booking.car;
-      const carLabel = car ? `${car.year} ${car.make} ${car.model}` : "Car no longer listed";
+  listContainer.innerHTML = requests
+    .map((req) => {
+      const carLabel = `${req.carYear} ${req.carMake} ${req.carModel}`;
+      const isUpgrade = req.serviceType === "upgrade";
 
       return `
-      <div class="booking-card" data-id="${booking._id}">
+      <div class="booking-card" data-id="${req._id}">
         <div class="booking-card-header">
           <div>
             <strong>${carLabel}</strong>
-            <span class="tag ${booking.type === "rent" ? "tag-rent" : "tag-sale"} inline-tag">
-              ${booking.type === "rent" ? "Rental" : "Purchase"}
+            <span class="tag ${isUpgrade ? "tag-rent" : "tag-sale"} inline-tag">
+              ${isUpgrade ? "Upgrade" : "Repair"}
             </span>
           </div>
-          <select class="status-select" data-id="${booking._id}">
-            <option value="pending" ${booking.status === "pending" ? "selected" : ""}>Pending</option>
-            <option value="contacted" ${booking.status === "contacted" ? "selected" : ""}>Contacted</option>
-            <option value="confirmed" ${booking.status === "confirmed" ? "selected" : ""}>Confirmed</option>
-            <option value="cancelled" ${booking.status === "cancelled" ? "selected" : ""}>Cancelled</option>
+          <select class="status-select" data-id="${req._id}">
+            <option value="pending" ${req.status === "pending" ? "selected" : ""}>Pending</option>
+            <option value="contacted" ${req.status === "contacted" ? "selected" : ""}>Contacted</option>
+            <option value="in_progress" ${req.status === "in_progress" ? "selected" : ""}>In Progress</option>
+            <option value="completed" ${req.status === "completed" ? "selected" : ""}>Completed</option>
+            <option value="cancelled" ${req.status === "cancelled" ? "selected" : ""}>Cancelled</option>
           </select>
         </div>
 
         <div class="booking-card-body">
-          <p><strong>${booking.customerName}</strong></p>
-          <p class="admin-row-meta">${booking.customerEmail} · ${booking.customerPhone}</p>
-          ${
-            booking.type === "rent" && booking.startDate
-              ? `<p class="admin-row-meta">${formatDate(booking.startDate)} → ${formatDate(booking.endDate)}</p>`
-              : ""
-          }
-          ${booking.message ? `<p class="booking-message">"${booking.message}"</p>` : ""}
-          <p class="booking-timestamp">Submitted ${formatDate(booking.createdAt)}</p>
+          <p><strong>${req.customerName}</strong></p>
+          <p class="admin-row-meta">${req.customerEmail} · ${req.customerPhone}</p>
+          ${req.preferredDate ? `<p class="admin-row-meta">Preferred date: ${formatDate(req.preferredDate)}</p>` : ""}
+          <p class="booking-message">"${req.description}"</p>
+          <p class="booking-timestamp">Submitted ${formatDate(req.createdAt)}</p>
         </div>
 
         <div class="admin-row-actions">
-          <button class="btn btn-danger" data-action="delete" data-id="${booking._id}">Delete</button>
+          <button class="btn btn-danger" data-action="delete" data-id="${req._id}">Delete</button>
         </div>
       </div>
     `;
@@ -112,9 +109,9 @@ listContainer.addEventListener("change", async (e) => {
     if (response.status === 401) return handleAuthError();
     if (!response.ok) throw new Error("Failed to update status");
   } catch (error) {
-    alert("Couldn't update this booking's status.");
+    alert("Couldn't update this request's status.");
     console.error(error);
-    loadBookings();
+    loadRequests();
   }
 });
 
@@ -122,7 +119,7 @@ listContainer.addEventListener("click", async (e) => {
   const btn = e.target.closest("button[data-action='delete']");
   if (!btn) return;
 
-  const confirmed = confirm("Delete this booking request?");
+  const confirmed = confirm("Delete this service request?");
   if (!confirmed) return;
 
   try {
@@ -132,12 +129,12 @@ listContainer.addEventListener("click", async (e) => {
     });
     if (response.status === 401) return handleAuthError();
     if (!response.ok) throw new Error("Delete failed");
-    loadBookings();
+    loadRequests();
   } catch (error) {
-    alert("Couldn't delete this booking.");
+    alert("Couldn't delete this request.");
     console.error(error);
   }
 });
 
 // ============ INITIAL LOAD ============
-loadBookings();
+loadRequests();

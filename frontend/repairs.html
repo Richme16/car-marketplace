@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Repairs & Upgrades — Bra Kay Autotech</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html">
+        <img src="assets/logo.png" alt="Bra Kay Autotech" class="logo-img" />
+      </a>
+      <nav class="main-nav">
+        <a href="index.html#listings">Inventory</a>
+        <a href="repairs.html" class="active-link">Repairs & Upgrades</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+      <a href="admin.html" class="btn btn-admin">Admin</a>
+    </div>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <p class="eyebrow">Bring your own car in</p>
+      <h1>Repairs & upgrades,<br />done right.</h1>
+      <p class="hero-sub">
+        Tell us what your car needs — from routine repairs to performance
+        upgrades — and we'll get back to you to schedule it.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ REQUEST FORM ============ -->
+  <section class="admin-section">
+    <div class="container">
+      <form id="service-form" class="admin-form" style="max-width: 620px; margin: 0 auto;">
+        <h2>Request repair or upgrade work</h2>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="serviceType">Type of service</label>
+            <select id="serviceType" required>
+              <option value="repair">Repair</option>
+              <option value="upgrade">Upgrade</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="preferredDate">Preferred date (optional)</label>
+            <input type="date" id="preferredDate" />
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="carMake">Car make</label>
+            <input type="text" id="carMake" required placeholder="Toyota" />
+          </div>
+          <div class="field">
+            <label for="carModel">Car model</label>
+            <input type="text" id="carModel" required placeholder="Corolla" />
+          </div>
+          <div class="field">
+            <label for="carYear">Car year</label>
+            <input type="number" id="carYear" required placeholder="2019" min="1970" max="2030" />
+          </div>
+        </div>
+
+        <div class="field full-width">
+          <label for="description">What does your car need?</label>
+          <textarea id="description" rows="4" required placeholder="Describe the issue or the upgrade you want..."></textarea>
+        </div>
+
+        <div class="field full-width">
+          <label for="customerName">Full name</label>
+          <input type="text" id="customerName" required />
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label for="customerEmail">Email</label>
+            <input type="email" id="customerEmail" required />
+          </div>
+          <div class="field">
+            <label for="customerPhone">Phone</label>
+            <input type="tel" id="customerPhone" required />
+          </div>
+        </div>
+
+        <p id="service-error" class="login-error" hidden></p>
+        <p id="service-success" class="booking-success" hidden>
+          Request sent! We'll be in touch soon to schedule your service.
+        </p>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="service-submit-btn">Send request</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer" id="contact">
+    <div class="container footer-inner">
+      <div>
+        <img src="assets/logo.png" alt="Bra Kay Autotech" class="footer-logo-img" />
+        <p>A car sales &amp; rental marketplace.</p>
+      </div>
+      <div>
+        <h3>Contact</h3>
+        <p>hello@brakayautotech.example</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/repairs.js"></script>
+</body>
+</html>

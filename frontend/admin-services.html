@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Car Details — Bra Kay Autotech</title>
+  <title>Service Requests — Bra Kay Autotech Admin</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,7 +16,6 @@
 </head>
 <body>
 
-  <!-- ============ HEADER ============ -->
   <header class="site-header">
     <div class="container header-inner">
       <a href="index.html">
@@ -24,37 +23,26 @@
       </a>
       <nav class="main-nav">
         <a href="index.html#listings">Inventory</a>
-        <a href="repairs.html">Repairs & Upgrades</a>
-        <a href="index.html#contact">Contact</a>
+        <a href="admin.html">Admin</a>
+        <a href="admin-bookings.html">Bookings</a>
+        <a href="admin-services.html" class="active-link">Service Requests</a>
+        <a href="#" id="logout-link">Log out</a>
       </nav>
-      <a href="admin.html" class="btn btn-admin">Admin</a>
     </div>
   </header>
 
-  <!-- ============ DETAILS CONTENT ============ -->
-  <section class="details-section">
+  <section class="admin-section">
     <div class="container">
-      <a href="index.html" class="back-link">&larr; Back to inventory</a>
+      <div class="admin-header">
+        <h1>Repair & Upgrade Requests</h1>
+        <p class="admin-sub">Service requests submitted by customers for their own cars.</p>
+      </div>
 
-      <div id="details-content"></div>
+      <div id="services-list" class="bookings-list"></div>
     </div>
   </section>
 
-  <!-- ============ FOOTER ============ -->
-  <footer class="site-footer" id="contact">
-    <div class="container footer-inner">
-      <div>
-        <img src="assets/logo.png" alt="Bra Kay Autotech" class="footer-logo-img" />
-        <p>A car sales &amp; rental marketplace.</p>
-      </div>
-      <div>
-        <h3>Contact</h3>
-        <p>hello@brakayautotech.example</p>
-      </div>
-    </div>
-  </footer>
-
   <script src="js/config.js"></script>
-  <script src="js/car-details.js"></script>
+  <script src="js/admin-services.js"></script>
 </body>
 </html>

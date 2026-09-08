@@ -1,9 +1,6 @@
 // ============ API CONFIG ============
-// Reads API_ROOT from config.js (loaded before this file)
 const API_BASE_URL = `${API_ROOT}/api/cars`;
 
-// All cars fetched from the API get stored here, so filtering/sorting
-// doesn't need to re-fetch every time.
 let allCars = [];
 
 // ============ DOM REFERENCES ============
@@ -32,8 +29,8 @@ function carCardHTML(car) {
             ? `<img src="${thumbnail}" alt="${car.year} ${car.make} ${car.model}" class="car-image" />`
             : `<svg viewBox="0 0 64 32" class="car-icon" aria-hidden="true">
                 <path d="M6 22 L10 12 Q13 8 20 8 L40 8 Q47 8 50 12 L58 22 L58 26 L52 26 Q52 22 47 22 Q42 22 42 26 L22 26 Q22 22 17 22 Q12 22 12 26 L6 26 Z" fill="currentColor" />
-                <circle cx="17" cy="26" r="4" fill="var(--asphalt-2)" stroke="currentColor" stroke-width="2" />
-                <circle cx="47" cy="26" r="4" fill="var(--asphalt-2)" stroke="currentColor" stroke-width="2" />
+                <circle cx="17" cy="26" r="4" fill="var(--off-white)" stroke="currentColor" stroke-width="2" />
+                <circle cx="47" cy="26" r="4" fill="var(--off-white)" stroke="currentColor" stroke-width="2" />
               </svg>`
         }
       </a>
@@ -63,7 +60,7 @@ function carCardHTML(car) {
   `;
 }
 
-// ============ FILTER + SORT + RENDER (runs on the already-fetched data) ============
+// ============ FILTER + SORT + RENDER ============
 function renderCars() {
   const query = qInput.value.trim().toLowerCase();
   const type = typeSelect.value;
@@ -118,7 +115,6 @@ form.addEventListener("submit", (e) => {
 typeSelect.addEventListener("change", renderCars);
 sortSelect.addEventListener("change", renderCars);
 
-// Buy/Rent button clicks (event delegation) — Details links now go straight to car-details.html
 grid.addEventListener("click", (e) => {
   const btn = e.target.closest("button[data-action]");
   if (!btn) return;

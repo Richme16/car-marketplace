@@ -1,26 +1,18 @@
 // ============ API CONFIG ============
-const API_BASE_URL = "http://localhost:5000/api/cars";
-const UPLOAD_URL = "http://localhost:5000/api/upload";
+const API_BASE_URL = `${API_ROOT}/api/cars`;
+const UPLOAD_URL = `${API_ROOT}/api/upload`;
 const MAX_PHOTOS = 5;
 
 // ============ AUTH CHECK ============
-// If there's no saved token, this page shouldn't be usable — send to login.
 const token = localStorage.getItem("motorline_admin_token");
 if (!token) {
   window.location.href = "login.html";
 }
 
-// Helper: returns the headers needed for a request that requires login.
-// Spread this into any fetch() that adds, edits, deletes, or uploads.
 function authHeaders(extra = {}) {
-  return {
-    Authorization: `Bearer ${token}`,
-    ...extra,
-  };
+  return { Authorization: `Bearer ${token}`, ...extra };
 }
 
-// Helper: call this whenever a protected request comes back as 401
-// (meaning the token is missing, invalid, or expired).
 function handleAuthError() {
   localStorage.removeItem("motorline_admin_token");
   alert("Your session has expired. Please log in again.");
@@ -33,15 +25,8 @@ document.getElementById("logout-link").addEventListener("click", (e) => {
   window.location.href = "login.html";
 });
 
-// Tracks whether we're currently editing a car (holds its _id) or adding a new one (null)
 let editingId = null;
-
-// Photos already saved to this car in the database (URLs, as strings).
-// Populated when editing an existing car.
 let existingImages = [];
-
-// Newly selected photo files from the computer, not uploaded yet.
-// Stored as File objects until the form is submitted.
 let selectedFiles = [];
 
 // ============ DOM REFERENCES ============
@@ -120,17 +105,15 @@ photosInput.addEventListener("change", () => {
 
   if (totalCount > MAX_PHOTOS) {
     alert(`You can have up to ${MAX_PHOTOS} photos total. Remove one before adding more.`);
-    photosInput.value = ""; // clear the picked files so it doesn't stay in a bad state
+    photosInput.value = "";
     return;
   }
 
   selectedFiles = selectedFiles.concat(newFiles);
-  photosInput.value = ""; // reset so selecting the same file again still fires "change"
+  photosInput.value = "";
   renderPreviews();
 });
 
-// Shows thumbnails for both already-saved images (existingImages) and
-// newly picked files (selectedFiles), each with a small "remove" button.
 function renderPreviews() {
   const totalCount = existingImages.length + selectedFiles.length;
   uploadHint.textContent =
@@ -163,7 +146,6 @@ function renderPreviews() {
   previewGrid.innerHTML = existingHTML + newHTML;
 }
 
-// Handles clicking the little "×" remove button on any preview thumbnail
 previewGrid.addEventListener("click", (e) => {
   const btn = e.target.closest(".preview-remove");
   if (!btn) return;
@@ -177,7 +159,7 @@ previewGrid.addEventListener("click", (e) => {
   renderPreviews();
 });
 
-// ============ UPLOAD SELECTED FILES TO CLOUDINARY (via our backend) ============
+// ============ UPLOAD SELECTED FILES ============
 async function uploadSelectedPhotos() {
   if (selectedFiles.length === 0) return [];
 
@@ -186,7 +168,7 @@ async function uploadSelectedPhotos() {
 
   const response = await fetch(UPLOAD_URL, {
     method: "POST",
-    headers: authHeaders(), // no Content-Type here — the browser sets it automatically for FormData
+    headers: authHeaders(),
     body: formData,
   });
 
@@ -194,7 +176,7 @@ async function uploadSelectedPhotos() {
   if (!response.ok) throw new Error("Photo upload failed");
 
   const data = await response.json();
-  return data.urls; // array of Cloudinary URLs
+  return data.urls;
 }
 
 // ============ BUILD A CAR OBJECT FROM THE FORM ============
@@ -219,20 +201,16 @@ function getFormData(uploadedUrls) {
   };
 }
 
-// ============ ADD OR UPDATE (SAME FORM HANDLES BOTH) ============
+// ============ ADD OR UPDATE ============
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   submitBtn.disabled = true;
   submitBtn.textContent = "Saving...";
 
   try {
-    // Step 1: upload any newly-picked photos to Cloudinary first
     const uploadedUrls = await uploadSelectedPhotos();
-
-    // Step 2: build the car object, now including all image URLs
     const carData = getFormData(uploadedUrls);
 
-    // Step 3: save the car itself (create or update)
     let response;
     if (editingId) {
       response = await fetch(`${API_BASE_URL}/${editingId}`, {
@@ -262,7 +240,7 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
-// ============ EDIT / DELETE BUTTON CLICKS (event delegation) ============
+// ============ EDIT / DELETE ============
 listContainer.addEventListener("click", async (e) => {
   const btn = e.target.closest("button[data-action]");
   if (!btn) return;
@@ -299,7 +277,6 @@ listContainer.addEventListener("click", async (e) => {
   }
 });
 
-// ============ FILL THE FORM WITH AN EXISTING CAR'S DATA ============
 function populateForm(car) {
   editingId = car._id;
   fields.make.value = car.make;
@@ -326,7 +303,6 @@ function populateForm(car) {
   form.scrollIntoView({ behavior: "smooth" });
 }
 
-// ============ RESET FORM BACK TO "ADD" MODE ============
 function resetForm() {
   editingId = null;
   existingImages = [];

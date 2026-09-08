@@ -1,8 +1,6 @@
 // ============ API CONFIG ============
 const API_BASE_URL = `${API_ROOT}/api/cars`;
 
-// ============ READ THE CAR ID FROM THE URL ============
-// If the URL is car-details.html?id=64f...ab, this pulls out that id string
 const params = new URLSearchParams(window.location.search);
 const carId = params.get("id");
 
@@ -44,7 +42,7 @@ function renderCar(car) {
   const priceLabel = isRent ? `$${car.price}/day` : `$${car.price.toLocaleString()}`;
   const images = car.images && car.images.length ? car.images : [];
 
-  document.title = `${car.year} ${car.make} ${car.model} — Bra Kay Motorline`;
+  document.title = `${car.year} ${car.make} ${car.model} — Bra Kay Autotech`;
 
   container.innerHTML = `
     <div class="details-layout">
@@ -58,8 +56,8 @@ function renderCar(car) {
               ? `<img src="${images[0]}" alt="${car.year} ${car.make} ${car.model}" class="details-image" id="main-image" />`
               : `<svg viewBox="0 0 64 32" class="car-icon large" aria-hidden="true">
                   <path d="M6 22 L10 12 Q13 8 20 8 L40 8 Q47 8 50 12 L58 22 L58 26 L52 26 Q52 22 47 22 Q42 22 42 26 L22 26 Q22 22 17 22 Q12 22 12 26 L6 26 Z" fill="currentColor" />
-                  <circle cx="17" cy="26" r="4" fill="var(--asphalt)" stroke="currentColor" stroke-width="2" />
-                  <circle cx="47" cy="26" r="4" fill="var(--asphalt)" stroke="currentColor" stroke-width="2" />
+                  <circle cx="17" cy="26" r="4" fill="var(--off-white)" stroke="currentColor" stroke-width="2" />
+                  <circle cx="47" cy="26" r="4" fill="var(--off-white)" stroke="currentColor" stroke-width="2" />
                 </svg>`
           }
         </div>
@@ -135,17 +133,14 @@ function renderCar(car) {
     openBookingModal(car);
   });
 
-  // ============ THUMBNAIL CLICK-TO-SWAP ============
   const thumbnailRow = document.getElementById("thumbnail-row");
   if (thumbnailRow) {
     thumbnailRow.addEventListener("click", (e) => {
       const btn = e.target.closest(".thumbnail-btn");
       if (!btn) return;
 
-      // Swap the main image
       document.getElementById("main-image").src = btn.dataset.src;
 
-      // Update which thumbnail looks "active"
       thumbnailRow
         .querySelectorAll(".thumbnail-btn")
         .forEach((el) => el.classList.remove("active"));
@@ -234,7 +229,7 @@ function openBookingModal(car) {
 
   closeBtn.addEventListener("click", closeModal);
   overlay.addEventListener("click", (e) => {
-    if (e.target === overlay) closeModal(); // close when clicking the dark backdrop
+    if (e.target === overlay) closeModal();
   });
 
   bookingForm.addEventListener("submit", async (e) => {
