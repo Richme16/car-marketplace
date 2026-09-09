@@ -10,7 +10,6 @@ const emptyState = document.getElementById("empty-state");
 const form = document.getElementById("search-form");
 const qInput = document.getElementById("q");
 const typeSelect = document.getElementById("type");
-const sortSelect = document.getElementById("sort");
 
 // ============ RENDER A SINGLE CAR CARD ============
 function carCardHTML(car) {
@@ -64,7 +63,6 @@ function carCardHTML(car) {
 function renderCars() {
   const query = qInput.value.trim().toLowerCase();
   const type = typeSelect.value;
-  const sort = sortSelect.value;
 
   let filtered = allCars.filter((car) => {
     const matchesQuery =
@@ -72,10 +70,6 @@ function renderCars() {
     const matchesType = type === "all" || car.type === type;
     return matchesQuery && matchesType;
   });
-
-  if (sort === "price-asc") filtered.sort((a, b) => a.price - b.price);
-  if (sort === "price-desc") filtered.sort((a, b) => b.price - a.price);
-  if (sort === "mileage-asc") filtered.sort((a, b) => a.mileage - b.mileage);
 
   resultsCount.textContent = `${filtered.length} car${filtered.length !== 1 ? "s" : ""}`;
 
@@ -113,7 +107,6 @@ form.addEventListener("submit", (e) => {
   renderCars();
 });
 typeSelect.addEventListener("change", renderCars);
-sortSelect.addEventListener("change", renderCars);
 
 grid.addEventListener("click", (e) => {
   const btn = e.target.closest("button[data-action]");
