@@ -70,7 +70,7 @@ function renderCar(car) {
               .map(
                 (url, index) => `
               <button type="button" class="thumbnail-btn ${index === 0 ? "active" : ""}" data-src="${url}">
-                <img src="${url}" alt="${car.make} ${car.model} photo ${index + 1}" />
+                <img src="${url}" alt="${car.make} ${car.model} photo ${index + 1}" loading="lazy" />
               </button>
             `
               )

@@ -66,15 +66,37 @@ h1, h2, h3 {
 }
 .btn-outline:hover { border-color: var(--red); color: var(--red); }
 
+.btn-pill {
+  border-radius: 999px;
+  padding: 10px 22px;
+  font-size: 0.82rem;
+}
 .btn-admin {
-  background: transparent;
+  background: var(--red);
   border: 1.5px solid var(--red);
-  color: var(--red);
-  padding: 9px 20px;
+  color: var(--white);
 }
 .btn-admin:hover {
-  background: var(--red);
+  background: var(--red-dark);
+  border-color: var(--red-dark);
+}
+.btn-repairs {
+  background: var(--black);
+  border: 1.5px solid var(--black);
   color: var(--white);
+}
+.btn-repairs:hover {
+  background: var(--charcoal);
+  border-color: var(--charcoal);
+}
+.nav-cta-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.footer-contact-btn {
+  display: inline-block;
+  margin-top: 12px;
 }
 
 .btn-danger {
@@ -207,7 +229,7 @@ h1, h2, h3 {
 }
 
 .car-media {
-  height: 170px;
+  aspect-ratio: 16 / 9;
   background: linear-gradient(135deg, var(--off-white), var(--white));
   display: flex;
   align-items: center;
@@ -217,6 +239,9 @@ h1, h2, h3 {
   cursor: pointer;
   overflow: hidden;
   border-bottom: 1px solid var(--border);
+}
+.car-title, .details-info h1, .admin-row-info strong {
+  text-transform: capitalize;
 }
 .car-icon {
   width: 60%;
@@ -692,7 +717,7 @@ h1, h2, h3 {
     gap: 14px 18px;
     font-size: 0.9rem;
   }
-  .btn-admin { padding: 7px 14px; font-size: 0.85rem; }
+  .btn-admin, .btn-repairs { padding: 7px 14px; font-size: 0.78rem; }
   .search-bar { flex-direction: column; align-items: stretch; max-width: 100%; }
   .logo-img { height: 32px; }
 }
