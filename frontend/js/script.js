@@ -10,11 +10,14 @@ const emptyState = document.getElementById("empty-state");
 const form = document.getElementById("search-form");
 const qInput = document.getElementById("q");
 const typeSelect = document.getElementById("type");
+const maxPriceInput = document.getElementById("maxPrice");
 
 // ============ RENDER A SINGLE CAR CARD ============
 function carCardHTML(car) {
   const isRent = car.type === "rent";
-  const priceLabel = isRent ? `$${car.price}/day` : `$${car.price.toLocaleString()}`;
+  const priceLabel = isRent
+    ? `GH₵${car.price.toLocaleString()}/day`
+    : `GH₵${car.price.toLocaleString()}`;
   const thumbnail = car.images && car.images.length ? car.images[0] : null;
 
   return `
@@ -63,12 +66,16 @@ function carCardHTML(car) {
 function renderCars() {
   const query = qInput.value.trim().toLowerCase();
   const type = typeSelect.value;
+  const maxPrice = parseFloat(maxPriceInput.value);
 
   let filtered = allCars.filter((car) => {
     const matchesQuery =
       !query || `${car.make} ${car.model}`.toLowerCase().includes(query);
     const matchesType = type === "all" || car.type === type;
-    return matchesQuery && matchesType;
+    const matchesMax =
+      !maxPrice || car.type !== "sale" || car.price <= maxPrice;
+
+    return matchesQuery && matchesType && matchesMax;
   });
 
   resultsCount.textContent = `${filtered.length} car${filtered.length !== 1 ? "s" : ""}`;
@@ -112,7 +119,10 @@ grid.addEventListener("click", (e) => {
   const btn = e.target.closest("button[data-action]");
   if (!btn) return;
   const car = allCars.find((c) => c._id === btn.dataset.id);
-  alert(`${btn.dataset.action.toUpperCase()}: ${car.make} ${car.model} — this will open a real booking form soon.`);
+  if (!car) return;
+
+  const action = btn.dataset.action;
+  window.location.href = `car-details.html?id=${car._id}&action=${action}`;
 });
 
 // ============ INITIAL LOAD ============

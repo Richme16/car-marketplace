@@ -22,11 +22,7 @@
       <a href="index.html">
         <img src="assets/logo.png" alt="Bra Kay Autotech" class="logo-img" />
       </a>
-    <div class="nav-cta-group">
-  <a href="repairs.html" class="btn btn-pill btn-repairs">Repairs & Upgrades</a>
-  <a href="admin.html" class="btn btn-pill btn-admin">Admin</a>
-</div>
-</div>
+      <a href="repairs.html" class="btn btn-pill btn-repairs header-repairs-btn">Repairs &amp; Upgrades</a>
     </div>
   </header>
 
@@ -36,23 +32,26 @@
       <p class="eyebrow">Buy outright, or rent by the day</p>
       <h1>FIND THE CAR THAT FITS THE DRIVE AHEAD</h1>
       <p class="hero-sub">
-       Explore certified vehicles, compare features, and complete your rental or purchase instantly.
+        Explore certified vehicles, compare features, and complete your rental or purchase instantly.
       </p>
 
       <form class="search-bar" id="search-form">
         <div class="field">
-          <label for="q">Search</label>
+          <label for="q" class="sr-only">Search</label>
           <input type="text" id="q" placeholder="Make, model, or keyword" />
         </div>
         <div class="field">
-          <label for="type">Listing type</label>
+          <label for="type" class="sr-only">Listing type</label>
           <select id="type">
-            <option value="all">All</option>
+            <option value="all">All types</option>
             <option value="sale">For sale</option>
             <option value="rent">For rent</option>
           </select>
         </div>
-        
+        <div class="field">
+          <label for="maxPrice" class="sr-only">Max amount</label>
+<input type="number" id="maxPrice" placeholder="Max amount (GH₵)" min="0" step="1000" />
+        </div>
         <button type="submit" class="btn btn-primary">Search</button>
       </form>
     </div>
@@ -77,14 +76,13 @@
   <!-- ============ FOOTER ============ -->
   <footer class="site-footer" id="contact">
     <div class="container footer-inner">
-      <div>
+      <div class="footer-brand">
         <img src="assets/logo.png" alt="Bra Kay Autotech" class="footer-logo-img" />
         <p>A car sales &amp; rental marketplace.</p>
       </div>
-      <div>
-        <h3>Contact</h3>
-        <p>hello@brakayautotech.example</p>
-        <a href="contact.html" class="btn btn-pill btn-admin footer-contact-btn">Contact Us</a>
+      <div class="footer-actions">
+        <a href="contact.html" class="btn btn-pill btn-admin">Contact Us</a>
+        <a href="admin.html" class="btn btn-pill btn-repairs">Admin</a>
       </div>
     </div>
   </footer>

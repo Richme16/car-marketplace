@@ -3,6 +3,7 @@ const API_BASE_URL = `${API_ROOT}/api/cars`;
 
 const params = new URLSearchParams(window.location.search);
 const carId = params.get("id");
+const actionParam = params.get("action");
 
 const container = document.getElementById("details-content");
 
@@ -21,6 +22,10 @@ async function loadCarDetails() {
 
     const car = await response.json();
     renderCar(car);
+
+    if (actionParam === "buy" || actionParam === "rent") {
+      openBookingModal(car);
+    }
   } catch (error) {
     showNotFound();
     console.error("Failed to fetch car:", error);
@@ -39,14 +44,16 @@ function showNotFound() {
 
 function renderCar(car) {
   const isRent = car.type === "rent";
-  const priceLabel = isRent ? `$${car.price}/day` : `$${car.price.toLocaleString()}`;
+  const priceLabel = isRent
+    ? `GH₵${car.price.toLocaleString()}/day`
+    : `GH₵${car.price.toLocaleString()}`;
   const images = car.images && car.images.length ? car.images : [];
 
   document.title = `${car.year} ${car.make} ${car.model} — Bra Kay Autotech`;
 
   container.innerHTML = `
     <div class="details-layout">
-      <div>
+      <div class="details-media-col">
         <div class="details-media" id="main-image-wrap">
           <span class="tag ${isRent ? "tag-rent" : "tag-sale"}">
             ${isRent ? "For Rent" : "For Sale"}

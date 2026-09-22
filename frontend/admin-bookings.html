@@ -16,17 +16,17 @@
 </head>
 <body>
 
+  <!-- ============ HEADER ============ -->
   <header class="site-header">
-    <div class="container header-inner">
-      <a href="index.html">
+    <div class="container header-inner header-inner-admin">
+      <a href="index.html" class="logo-link">
         <img src="assets/logo.png" alt="Bra Kay Autotech" class="logo-img" />
       </a>
-      <nav class="main-nav">
+      <nav class="main-nav admin-nav">
         <a href="index.html#listings">Inventory</a>
         <a href="admin.html">Admin</a>
         <a href="admin-bookings.html" class="active-link">Bookings</a>
         <a href="admin-services.html">Service Requests</a>
-        <a href="#" id="logout-link">Log out</a>
       </nav>
     </div>
   </header>
@@ -39,6 +39,11 @@
       </div>
 
       <div id="bookings-list" class="bookings-list"></div>
+
+      <!-- ============ LOGOUT (bottom of page) ============ -->
+      <div class="admin-logout-bar">
+        <a href="#" id="logout-link" class="btn btn-danger admin-logout-btn">Log out</a>
+      </div>
     </div>
   </section>
 
