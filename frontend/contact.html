@@ -16,17 +16,19 @@
 </head>
 <body>
 
-  <!-- ============ HEADER ============ -->
   <header class="site-header">
     <div class="container header-inner">
       <a href="index.html">
         <img src="assets/logo.png" alt="Bra Kay Autotech" class="logo-img" />
       </a>
-      <a href="repairs.html" class="btn btn-pill btn-repairs header-repairs-btn">Repairs &amp; Upgrades</a>
+      <nav class="header-nav">
+        <a href="index.html">Home</a>
+        <a href="repairs.html">Repairs &amp; Upgrades</a>
+        <a href="contact.html" class="active-link">Contact</a>
+      </nav>
     </div>
   </header>
 
-  <!-- ============ CONTACT HERO ============ -->
   <section class="hero">
     <div class="container hero-inner">
       <p class="eyebrow">Get in touch</p>
@@ -38,12 +40,11 @@
     </div>
   </section>
 
-  <!-- ============ CONTACT CONTENT ============ -->
   <section class="listings contact-section">
     <div class="container">
       <div class="contact-intro">
         <p class="eyebrow eyebrow-light">Contact information</p>
-        <h2>HOW TO REACH US</h2>
+        <h2>How to reach us</h2>
         <p class="contact-lead">
           Have a question about one of our vehicles, a rental, repairs, or an
           upgrade? Get in touch using the details below.
@@ -53,33 +54,27 @@
       <div class="contact-grid">
         <div class="contact-item">
           <h3>Phone</h3>
-          <p><a href="tel:+233537715014">[ 0537715014 ]</a></p>
-        </div>
-
-        <div class="contact-item">
-          <h3>Email</h3>
-          <p><a href="mailto:Brakayautotech@gmail.com">[ Brakayautotech@gmail.com ]</a></p>
+          <p><a href="tel:+233537715014">+233 53 771 5014</a></p>
         </div>
 
         <div class="contact-item">
           <h3>Location</h3>
-          GALILEA MARKET
-          GA MUNICIPAL ASSEMBLY
+          <p>GALILEA MARKET (GA MUNICIPAL ASSEMBLY)</p>
         </div>
 
         <div class="contact-item">
           <h3>Opening hours</h3>
           <p>
-            Monday – Friday: [ 8:00 AM - 10:00 PM ]<br />
-            Saturday:        [ 9:00 AM - 9:00 PM ]<br />
-            Sunday:          [ 9:00 AM - 9:00 PM ]
+            Monday – Friday: 6:00 AM – 10:00 PM<br />
+            Saturday: 8:00 AM – 8:00 PM<br />
+            Sunday: 8:00 AM – 8:00 PM
           </p>
         </div>
 
         <div class="contact-item">
           <h3>WhatsApp</h3>
           <p>
-            <a href="https://wa.me/233537715014" target="_blank" rel="noopener">
+            <a href="https://wa.me/233507078092" target="_blank" rel="noopener">
               Message us on WhatsApp
             </a>
           </p>
@@ -91,13 +86,34 @@
   <!-- ============ FOOTER ============ -->
   <footer class="site-footer">
     <div class="container footer-inner">
-      <div class="footer-brand">
-        <img src="assets/logo.png" alt="Bra Kay Autotech" class="footer-logo-img" />
-        <p>A car sales &amp; rental marketplace.</p>
+      <img src="assets/logo.png" alt="Bra Kay Autotech" class="footer-logo-img" />
+      <p class="footer-tagline">A car sales &amp; rental marketplace.</p>
+
+           <div class="footer-socials">
+        <a href="https://instagram.com/bra_kay2026" aria-label="Instagram" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+        </a>
+        <a href="#" aria-label="Facebook" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+          </svg>
+        </a>
+        <a href="https://tiktok.com/@brakaycar_house" aria-label="TikTok" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path>
+          </svg>
+        </a>
+        <a href="https://snapchat.com/add/bra_kay155" aria-label="Snapchat" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2C9.2 2 7 4.2 7 7v3.5c-.6-.3-1.3-.6-1.9-.6-.4 0-.8.1-1 .4-.3.5 0 1 .9 1.6.3.2.6.3.8.4-.5.9-1.5 1.8-2.7 2.2-.3.1-.5.4-.4.7.4 1.2 2.3 1.6 3.4 1.9.3.1.4.2.5.5.1.4.2.5.5.5.4 0 .9-.4 1.6-.4.4 0 .9.1 1.4.3.5.2 1.1.4 1.7.4s1.2-.2 1.7-.4c.5-.2 1-.3 1.4-.3.7 0 1.2.4 1.6.4.3 0 .4-.1.5-.5.1-.3.2-.4.5-.5 1.1-.3 3-.7 3.4-1.9.1-.3-.1-.6-.4-.7-1.2-.4-2.2-1.3-2.7-2.2.2-.1.5-.2.8-.4.9-.6 1.2-1.1.9-1.6-.2-.3-.6-.4-1-.4-.6 0-1.3.3-1.9.6V7c0-2.8-2.2-5-5-5z"/>
+          </svg>
+        </a>
       </div>
-      <div class="footer-actions footer-actions-right-only">
-        <a href="admin.html" class="btn btn-pill btn-repairs">Admin</a>
-      </div>
+      <div class="footer-legal">© 2026 Bra Kay Autotech</div>
     </div>
   </footer>
 
