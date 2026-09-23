@@ -178,10 +178,6 @@ function openBookingModal(car) {
             <input type="text" id="customerName" required />
           </div>
           <div class="field">
-            <label for="customerEmail">Email</label>
-            <input type="email" id="customerEmail" required />
-          </div>
-          <div class="field">
             <label for="customerPhone">Phone</label>
             <input type="tel" id="customerPhone" required />
           </div>
@@ -210,7 +206,7 @@ function openBookingModal(car) {
 
           <p id="booking-error" class="login-error" hidden></p>
           <p id="booking-success" class="booking-success" hidden>
-            Request sent! We'll be in touch soon.
+            Request sent! Opening WhatsApp...
           </p>
 
           <button type="submit" class="btn btn-primary" id="booking-submit-btn">
@@ -245,31 +241,66 @@ function openBookingModal(car) {
     submitBtn.disabled = true;
     submitBtn.textContent = "Sending...";
 
+    const customerName = document.getElementById("customerName").value.trim();
+    const customerPhone = document.getElementById("customerPhone").value.trim();
+    const message = document.getElementById("message").value.trim();
+
     const bookingData = {
       car: car._id,
       type: car.type,
-      customerName: document.getElementById("customerName").value.trim(),
-      customerEmail: document.getElementById("customerEmail").value.trim(),
-      customerPhone: document.getElementById("customerPhone").value.trim(),
-      message: document.getElementById("message").value.trim(),
+      customerName,
+      customerPhone,
+      message,
     };
 
+    let startDate = "";
+    let endDate = "";
     if (isRent) {
-      bookingData.startDate = document.getElementById("startDate").value;
-      bookingData.endDate = document.getElementById("endDate").value;
+      startDate = document.getElementById("startDate").value;
+      endDate = document.getElementById("endDate").value;
+      bookingData.startDate = startDate;
+      bookingData.endDate = endDate;
     }
 
     try {
-      const response = await fetch(BOOKING_API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(bookingData),
-      });
+      // 1. Save to database
+      // const response = await fetch(BOOKING_API_URL, {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(bookingData),
+      // });
 
-      if (!response.ok) throw new Error("Failed to submit request");
+      // if (!response.ok) throw new Error("Failed to submit request");
 
+      // 2. Show success message
       bookingForm.hidden = true;
       successMsg.hidden = false;
+
+      // 3. Build WhatsApp message
+      const waLines = [
+        `*New ${isRent ? "Rental" : "Purchase"} Request*`,
+        ``,
+        `*Car:* ${car.year} ${car.make} ${car.model}`,
+        `*Price:* ${isRent ? `GH₵${car.price.toLocaleString()}/day` : `GH₵${car.price.toLocaleString()}`}`,
+        ``,
+        `*Name:* ${customerName}`,
+        `*Phone:* ${customerPhone}`,
+      ];
+      if (isRent) {
+        waLines.push(`*Dates:* ${startDate} → ${endDate}`);
+      }
+      if (message) {
+        waLines.push(``, `*Message:* ${message}`);
+      }
+
+      const waText = waLines.join("\n");
+      const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waText)}`;
+
+      // 4. Auto-open WhatsApp after a short delay (so user sees the success message)
+      setTimeout(() => {
+        window.open(waUrl, "_blank");
+      }, 800);
+
     } catch (error) {
       errorMsg.textContent = "Something went wrong. Please try again.";
       errorMsg.hidden = false;

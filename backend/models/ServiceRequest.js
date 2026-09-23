@@ -6,7 +6,6 @@ const serviceRequestSchema = new mongoose.Schema(
   {
     serviceType: { type: String, enum: ["repair", "upgrade"], required: true },
     customerName: { type: String, required: true },
-    customerEmail: { type: String, required: true },
     customerPhone: { type: String, required: true },
     carMake: { type: String, required: true },
     carModel: { type: String, required: true },

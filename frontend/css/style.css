@@ -254,12 +254,13 @@ h1, h2, h3 {
 .listings-header h2 { font-size: 1.8rem; }
 .results-count { color: var(--grey); font-size: 0.9rem; }
 
+/* Grid: cards stretch to fill their row → equal heights */
 .car-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 24px;
   width: 100%;
-  align-items: start;
+  align-items: stretch;
 }
 
 .car-card {
@@ -269,6 +270,7 @@ h1, h2, h3 {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  height: 100%;           /* fill the grid row height */
   transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
   min-width: 0;
   max-width: 100%;
@@ -279,24 +281,19 @@ h1, h2, h3 {
   box-shadow: 0 8px 24px rgba(200, 20, 20, 0.1);
 }
 
-/* Media box — hugs whatever is inside it */
+/* Media box — UNIFORM 4:3 shape */
 .car-media {
   position: relative;
   cursor: pointer;
   overflow: hidden;
   border-bottom: 1px solid var(--border);
   width: 100%;
-  background: transparent;
-}
-
-/* Only force 16:9 on the placeholder (when there's NO real <img>) */
-.car-media:not(:has(img.car-image)) {
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(135deg, var(--off-white), var(--white));
+  color: var(--grey);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--off-white), var(--white));
-  color: var(--grey);
 }
 
 .car-title, .details-info h1, .admin-row-info strong {
@@ -309,10 +306,14 @@ h1, h2, h3 {
 }
 .car-card:hover .car-icon { color: var(--red); transition: color 0.2s ease; }
 
-/* Listings card image — full width, natural height, no crop */
+/* Listing card image — fill the 4:3 box (crops slightly) */
 .car-image {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
   display: block;
 }
 
@@ -392,6 +393,7 @@ h1, h2, h3 {
   overflow: hidden;
 }
 
+/* Details main image — natural height, no crop */
 .details-media {
   position: relative;
   overflow: hidden;
@@ -402,7 +404,7 @@ h1, h2, h3 {
   border-radius: var(--radius);
 }
 
-/* Only force 16:9 on the placeholder (when there's NO real <img>) */
+/* Placeholder only — fixed 16:9 box */
 .details-media:not(:has(img.details-image)) {
   aspect-ratio: 16 / 9;
   min-height: 320px;
@@ -414,7 +416,7 @@ h1, h2, h3 {
 
 .car-icon.large { width: 65%; max-width: 320px; color: var(--border); }
 
-/* Details main image — full width, natural height, no crop */
+/* Details main image — full width, natural height */
 .details-media img,
 .details-image,
 #main-image {
@@ -515,7 +517,6 @@ h1, h2, h3 {
   justify-content: center;
 }
 
-/* Thumbnails keep uniform size */
 .thumbnail-btn img {
   width: 100%;
   height: 100%;

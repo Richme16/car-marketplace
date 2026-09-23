@@ -10,7 +10,7 @@ const bookingSchema = new mongoose.Schema(
     },
     type: { type: String, enum: ["sale", "rent"], required: true },
     customerName: { type: String, required: true },
-    customerEmail: { type: String, required: true },
+    
     customerPhone: { type: String, required: true },
     // Only relevant for rentals — left blank for purchases
     startDate: { type: Date },
