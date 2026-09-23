@@ -4,8 +4,29 @@ const SERVICE_API_URL = `${API_ROOT}/api/services`;
 // ============ DOM REFERENCES ============
 const form = document.getElementById("service-form");
 const errorMsg = document.getElementById("service-error");
-const successMsg = document.getElementById("service-success");
 const submitBtn = document.getElementById("service-submit-btn");
+
+// ============ SUCCESS ANIMATION HELPER ============
+function showSuccessAnimation(formEl, options = {}) {
+  const {
+    title = "Request sent!",
+    subtitle = "We'll be in touch soon.",
+    note = "Opening WhatsApp...",
+  } = options;
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "success-anim";
+  wrapper.innerHTML = `
+    <svg class="success-svg" viewBox="0 0 100 100" aria-hidden="true">
+      <circle class="success-circle-path" cx="50" cy="50" r="45" />
+      <path class="success-check-path" d="M30 52 L45 67 L72 38" />
+    </svg>
+    <h3 class="success-title">${title}</h3>
+    <p class="success-subtitle">${subtitle}</p>
+    <p class="success-note">${note}</p>
+  `;
+  formEl.replaceWith(wrapper);
+}
 
 // ============ FORM SUBMIT ============
 form.addEventListener("submit", async (e) => {
@@ -35,9 +56,12 @@ form.addEventListener("submit", async (e) => {
 
     if (!response.ok) throw new Error("Failed to submit request");
 
-    // 2. Show success message
-    form.hidden = true;
-    successMsg.hidden = false;
+    // 2. Play success animation (replaces the form)
+    showSuccessAnimation(form, {
+      title: "Request sent!",
+      subtitle: `Your ${serviceData.serviceType === "repair" ? "repair" : "upgrade"} request for the ${serviceData.carYear} ${serviceData.carMake} ${serviceData.carModel} was received.`,
+      note: "Opening WhatsApp...",
+    });
 
     // 3. Build WhatsApp message
     const waLines = [
@@ -58,10 +82,10 @@ form.addEventListener("submit", async (e) => {
     const waText = waLines.join("\n");
     const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waText)}`;
 
-    // 4. Auto-open WhatsApp after a short delay
+    // 4. Auto-open WhatsApp after the animation plays
     setTimeout(() => {
       window.open(waUrl, "_blank");
-    }, 800);
+    }, 1400);
 
   } catch (error) {
     errorMsg.textContent = "Something went wrong. Please try again.";

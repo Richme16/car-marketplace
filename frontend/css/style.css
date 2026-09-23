@@ -254,13 +254,13 @@ h1, h2, h3 {
 .listings-header h2 { font-size: 1.8rem; }
 .results-count { color: var(--grey); font-size: 0.9rem; }
 
-/* Grid: cards stretch to fill their row → equal heights */
+/* Grid — cards keep their natural heights */
 .car-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 24px;
   width: 100%;
-  align-items: stretch;
+  align-items: start;
 }
 
 .car-card {
@@ -270,7 +270,6 @@ h1, h2, h3 {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: 100%;           /* fill the grid row height */
   transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
   min-width: 0;
   max-width: 100%;
@@ -281,19 +280,24 @@ h1, h2, h3 {
   box-shadow: 0 8px 24px rgba(200, 20, 20, 0.1);
 }
 
-/* Media box — UNIFORM 4:3 shape */
+/* Media box — hugs its content */
 .car-media {
   position: relative;
   cursor: pointer;
   overflow: hidden;
   border-bottom: 1px solid var(--border);
   width: 100%;
-  aspect-ratio: 4 / 3;
-  background: linear-gradient(135deg, var(--off-white), var(--white));
-  color: var(--grey);
+  background: transparent;
+}
+
+/* Only the placeholder (no image) gets the 16:9 box */
+.car-media:not(:has(img.car-image)) {
+  aspect-ratio: 16 / 9;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: linear-gradient(135deg, var(--off-white), var(--white));
+  color: var(--grey);
 }
 
 .car-title, .details-info h1, .admin-row-info strong {
@@ -306,14 +310,10 @@ h1, h2, h3 {
 }
 .car-card:hover .car-icon { color: var(--red); transition: color 0.2s ease; }
 
-/* Listing card image — fill the 4:3 box (crops slightly) */
+/* Listing image — natural height, no crop */
 .car-image {
-  position: absolute;
-  inset: 0;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
+  height: auto;
   display: block;
 }
 
@@ -393,7 +393,7 @@ h1, h2, h3 {
   overflow: hidden;
 }
 
-/* Details main image — natural height, no crop */
+/* Details main image — natural height */
 .details-media {
   position: relative;
   overflow: hidden;
@@ -416,7 +416,7 @@ h1, h2, h3 {
 
 .car-icon.large { width: 65%; max-width: 320px; color: var(--border); }
 
-/* Details main image — full width, natural height */
+/* Details image — full width, natural height */
 .details-media img,
 .details-image,
 #main-image {
@@ -517,6 +517,7 @@ h1, h2, h3 {
   justify-content: center;
 }
 
+/* Thumbnails keep uniform size */
 .thumbnail-btn img {
   width: 100%;
   height: 100%;
@@ -1061,4 +1062,138 @@ h1, h2, h3 {
   .car-actions { flex-direction: column; }
   .car-actions .btn { width: 100%; }
   .spec-grid { grid-template-columns: 1fr; }
+}
+/* ============================================================
+   SUCCESS ANIMATION — booking + service forms
+   ============================================================ */
+
+.success-anim {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px 8px;
+}
+
+.success-svg {
+  width: 96px;
+  height: 96px;
+  display: block;
+  margin: 0 auto 20px;
+}
+
+/* Circle draws itself */
+.success-circle-path {
+  fill: none;
+  stroke: #1a7a3a;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 283;      /* 2 × π × 45 */
+  stroke-dashoffset: 283;
+  transform-origin: 50% 50%;
+  transform: rotate(-90deg);
+  animation: drawCircle 0.6s ease forwards;
+}
+
+/* Check draws after circle */
+.success-check-path {
+  fill: none;
+  stroke: #1a7a3a;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 60;
+  stroke-dashoffset: 60;
+  animation: drawCheck 0.4s ease 0.5s forwards;
+}
+
+.success-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--black);
+  margin: 0 0 6px;
+  letter-spacing: 0.3px;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeUp 0.4s ease 0.9s forwards;
+}
+
+.success-subtitle {
+  color: var(--grey);
+  font-size: 0.9rem;
+  margin: 0 0 12px;
+  max-width: 32ch;
+  line-height: 1.5;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeUp 0.4s ease 1s forwards;
+}
+
+.success-note {
+  color: #1a7a3a;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin: 0;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeUp 0.4s ease 1.15s forwards;
+}
+
+.success-note::after {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-left: 6px;
+  border-radius: 50%;
+  background: #1a7a3a;
+  animation: pulseDot 1s ease-in-out infinite;
+}
+
+@keyframes drawCircle {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes drawCheck {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.4; transform: scale(0.7); }
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .success-circle-path,
+  .success-check-path {
+    stroke-dashoffset: 0;
+    animation: none;
+  }
+  .success-title,
+  .success-subtitle,
+  .success-note {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+  .success-note::after {
+    animation: none;
+  }
+}
+
+/* Small phones */
+@media (max-width: 380px) {
+  .success-svg { width: 76px; height: 76px; }
+  .success-title { font-size: 1.25rem; }
+  .success-subtitle { font-size: 0.82rem; }
 }

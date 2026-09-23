@@ -159,6 +159,29 @@ function renderCar(car) {
 // ============ INITIAL LOAD ============
 loadCarDetails();
 
+// ============ SUCCESS ANIMATION HELPER ============
+// Replaces a form element with an animated success state
+function showSuccessAnimation(formEl, options = {}) {
+  const {
+    title = "Request sent!",
+    subtitle = "We'll be in touch soon.",
+    note = "Opening WhatsApp...",
+  } = options;
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "success-anim";
+  wrapper.innerHTML = `
+    <svg class="success-svg" viewBox="0 0 100 100" aria-hidden="true">
+      <circle class="success-circle-path" cx="50" cy="50" r="45" />
+      <path class="success-check-path" d="M30 52 L45 67 L72 38" />
+    </svg>
+    <h3 class="success-title">${title}</h3>
+    <p class="success-subtitle">${subtitle}</p>
+    <p class="success-note">${note}</p>
+  `;
+  formEl.replaceWith(wrapper);
+}
+
 // ============ BOOKING MODAL ============
 const BOOKING_API_URL = `${API_ROOT}/api/bookings`;
 
@@ -205,9 +228,6 @@ function openBookingModal(car) {
           </div>
 
           <p id="booking-error" class="login-error" hidden></p>
-          <p id="booking-success" class="booking-success" hidden>
-            Request sent! Opening WhatsApp...
-          </p>
 
           <button type="submit" class="btn btn-primary" id="booking-submit-btn">
             Send ${isRent ? "rental" : "purchase"} request
@@ -223,7 +243,6 @@ function openBookingModal(car) {
   const closeBtn = document.getElementById("modal-close");
   const bookingForm = document.getElementById("booking-form");
   const errorMsg = document.getElementById("booking-error");
-  const successMsg = document.getElementById("booking-success");
   const submitBtn = document.getElementById("booking-submit-btn");
 
   function closeModal() {
@@ -264,17 +283,20 @@ function openBookingModal(car) {
 
     try {
       // 1. Save to database
-      // const response = await fetch(BOOKING_API_URL, {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify(bookingData),
-      // });
+      const response = await fetch(BOOKING_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bookingData),
+      });
 
-      // if (!response.ok) throw new Error("Failed to submit request");
+      if (!response.ok) throw new Error("Failed to submit request");
 
-      // 2. Show success message
-      bookingForm.hidden = true;
-      successMsg.hidden = false;
+      // 2. Play success animation (replaces the form)
+      showSuccessAnimation(bookingForm, {
+        title: "Request sent!",
+        subtitle: `${isRent ? "Rental" : "Purchase"} request for the ${car.year} ${car.make} ${car.model} received.`,
+        note: "Opening WhatsApp...",
+      });
 
       // 3. Build WhatsApp message
       const waLines = [
@@ -296,10 +318,10 @@ function openBookingModal(car) {
       const waText = waLines.join("\n");
       const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waText)}`;
 
-      // 4. Auto-open WhatsApp after a short delay (so user sees the success message)
+      // 4. Auto-open WhatsApp after the animation plays (~1.4s)
       setTimeout(() => {
         window.open(waUrl, "_blank");
-      }, 800);
+      }, 1400);
 
     } catch (error) {
       errorMsg.textContent = "Something went wrong. Please try again.";
