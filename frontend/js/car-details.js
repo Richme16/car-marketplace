@@ -160,7 +160,6 @@ function renderCar(car) {
 loadCarDetails();
 
 // ============ SUCCESS ANIMATION HELPER ============
-// Replaces a form element with an animated success state
 function showSuccessAnimation(formEl, options = {}) {
   const {
     title = "Request sent!",
@@ -281,8 +280,32 @@ function openBookingModal(car) {
       bookingData.endDate = endDate;
     }
 
+    // ========== STEP 1: Build WhatsApp message ==========
+    const waLines = [
+      `*New ${isRent ? "Rental" : "Purchase"} Request*`,
+      ``,
+      `*Car:* ${car.year} ${car.make} ${car.model}`,
+      `*Price:* ${isRent ? `GH₵${car.price.toLocaleString()}/day` : `GH₵${car.price.toLocaleString()}`}`,
+      ``,
+      `*Name:* ${customerName}`,
+      `*Phone:* ${customerPhone}`,
+    ];
+    if (isRent) {
+      waLines.push(`*Dates:* ${startDate} → ${endDate}`);
+    }
+    if (message) {
+      waLines.push(``, `*Message:* ${message}`);
+    }
+
+    const waText = waLines.join("\n");
+
+    // ========== STEP 2: Open WhatsApp IMMEDIATELY on user click ==========
+    // Using api.whatsapp.com instead of wa.me — more reliable, avoids popup blocks.
+    const waUrl = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(waText)}`;
+    window.open(waUrl, "_blank");
+
+    // ========== STEP 3: Save to database in background ==========
     try {
-      // 1. Save to database
       const response = await fetch(BOOKING_API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -291,40 +314,15 @@ function openBookingModal(car) {
 
       if (!response.ok) throw new Error("Failed to submit request");
 
-      // 2. Play success animation (replaces the form)
+      // Show success animation (WhatsApp already opened)
       showSuccessAnimation(bookingForm, {
         title: "Request sent!",
         subtitle: `${isRent ? "Rental" : "Purchase"} request for the ${car.year} ${car.make} ${car.model} received.`,
-        note: "Opening WhatsApp...",
+        note: "WhatsApp opened — tap send there",
       });
 
-      // 3. Build WhatsApp message
-      const waLines = [
-        `*New ${isRent ? "Rental" : "Purchase"} Request*`,
-        ``,
-        `*Car:* ${car.year} ${car.make} ${car.model}`,
-        `*Price:* ${isRent ? `GH₵${car.price.toLocaleString()}/day` : `GH₵${car.price.toLocaleString()}`}`,
-        ``,
-        `*Name:* ${customerName}`,
-        `*Phone:* ${customerPhone}`,
-      ];
-      if (isRent) {
-        waLines.push(`*Dates:* ${startDate} → ${endDate}`);
-      }
-      if (message) {
-        waLines.push(``, `*Message:* ${message}`);
-      }
-
-      const waText = waLines.join("\n");
-      const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waText)}`;
-
-      // 4. Auto-open WhatsApp after the animation plays (~1.4s)
-      setTimeout(() => {
-        window.open(waUrl, "_blank");
-      }, 1400);
-
     } catch (error) {
-      errorMsg.textContent = "Something went wrong. Please try again.";
+      errorMsg.textContent = "Booking couldn't be saved, but WhatsApp is still open — send the message there to complete your request.";
       errorMsg.hidden = false;
       submitBtn.disabled = false;
       submitBtn.textContent = `Send ${isRent ? "rental" : "purchase"} request`;

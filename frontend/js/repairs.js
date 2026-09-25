@@ -46,8 +46,31 @@ form.addEventListener("submit", async (e) => {
     customerPhone: document.getElementById("customerPhone").value.trim(),
   };
 
+  // ========== STEP 1: Build WhatsApp message ==========
+  const waLines = [
+    `*New ${serviceData.serviceType === "repair" ? "Repair" : "Upgrade"} Request*`,
+    ``,
+    `*Car:* ${serviceData.carYear} ${serviceData.carMake} ${serviceData.carModel}`,
+    `*Details:* ${serviceData.description}`,
+  ];
+  if (serviceData.preferredDate) {
+    waLines.push(`*Preferred date:* ${serviceData.preferredDate}`);
+  }
+  waLines.push(
+    ``,
+    `*Name:* ${serviceData.customerName}`,
+    `*Phone:* ${serviceData.customerPhone}`
+  );
+
+  const waText = waLines.join("\n");
+
+  // ========== STEP 2: Open WhatsApp IMMEDIATELY on user click ==========
+  // Using api.whatsapp.com instead of wa.me — more reliable, avoids popup blocks.
+  const waUrl = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(waText)}`;
+  window.open(waUrl, "_blank");
+
+  // ========== STEP 3: Save to database in background ==========
   try {
-    // 1. Save to database
     const response = await fetch(SERVICE_API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -56,39 +79,15 @@ form.addEventListener("submit", async (e) => {
 
     if (!response.ok) throw new Error("Failed to submit request");
 
-    // 2. Play success animation (replaces the form)
+    // Show success animation (WhatsApp already opened)
     showSuccessAnimation(form, {
       title: "Request sent!",
       subtitle: `Your ${serviceData.serviceType === "repair" ? "repair" : "upgrade"} request for the ${serviceData.carYear} ${serviceData.carMake} ${serviceData.carModel} was received.`,
-      note: "Opening WhatsApp...",
+      note: "WhatsApp opened — tap send there",
     });
 
-    // 3. Build WhatsApp message
-    const waLines = [
-      `*New ${serviceData.serviceType === "repair" ? "Repair" : "Upgrade"} Request*`,
-      ``,
-      `*Car:* ${serviceData.carYear} ${serviceData.carMake} ${serviceData.carModel}`,
-      `*Details:* ${serviceData.description}`,
-    ];
-    if (serviceData.preferredDate) {
-      waLines.push(`*Preferred date:* ${serviceData.preferredDate}`);
-    }
-    waLines.push(
-      ``,
-      `*Name:* ${serviceData.customerName}`,
-      `*Phone:* ${serviceData.customerPhone}`
-    );
-
-    const waText = waLines.join("\n");
-    const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waText)}`;
-
-    // 4. Auto-open WhatsApp after the animation plays
-    setTimeout(() => {
-      window.open(waUrl, "_blank");
-    }, 1400);
-
   } catch (error) {
-    errorMsg.textContent = "Something went wrong. Please try again.";
+    errorMsg.textContent = "Request couldn't be saved, but WhatsApp is still open — send the message there to complete your request.";
     errorMsg.hidden = false;
     submitBtn.disabled = false;
     submitBtn.textContent = "Send request";
